@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
-	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 // ProviderSet is data providers.
@@ -29,4 +29,7 @@ func NewDB(c *conf.Data) *gorm.DB {
 	db, err := gorm.Open(mysql.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
+	}
+	db.AutoMigrate()
+	return db
 }
