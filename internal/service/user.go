@@ -64,3 +64,13 @@ func (s *RealWorldService) GetCurrentUser(ctx context.Context, req *v1.GetCurren
 		},
 	}, nil
 }
+
+func (s *RealWorldService) GetProfile(ctx context.Context, req *v1.FollowUserRequest) (reply *v1.ProfileReply, err error) {
+	return &v1.ProfileReply{
+	}, nil
+}
+
+func (s *RealWorldService) GetTags(ctx context.Context, req *v1.FollowUserRequest) (reply *v1.TagListReply, err error)  {
+	return &v1.TagListReply{
+	}, nil
+}
