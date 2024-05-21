@@ -26,10 +26,12 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 }
 
 func NewDB(c *conf.Data) *gorm.DB {
-	db, err := gorm.Open(mysql.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open("root:dangerous@tcp(127.0.0.1:3307)/realworld?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
-	db.AutoMigrate()
+	if err := db.AutoMigrate(); err != nil {
+		panic(err)
+	}
 	return db
 }
