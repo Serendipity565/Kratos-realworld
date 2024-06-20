@@ -14,7 +14,7 @@ type userRepo struct {
 }
 
 // NewGreeterRepo .
-func NewUserrRepo(data *Data, logger log.Logger) biz.UserRepo {
+func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	return &userRepo{
 		data: data,
 		log:  log.NewHelper(logger),
@@ -23,6 +23,10 @@ func NewUserrRepo(data *Data, logger log.Logger) biz.UserRepo {
 
 func (r *userRepo) CreateUser(ctx context.Context, u *biz.User) error {
 	return nil
+}
+
+func (r *userRepo) GetUserByEmail(ctx context.Context, email string) (*biz.User, error) {
+	return nil, nil
 }
 
 type profileRepo struct {
