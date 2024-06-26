@@ -34,7 +34,6 @@ type profileRepo struct {
 	log  *log.Helper
 }
 
-// NewGreeterRepo .
 func NewProfileRepo(data *Data, logger log.Logger) biz.ProfileRepo {
 	return &profileRepo{
 		data: data,
