@@ -1,6 +1,8 @@
 package biz
 
 import (
+	"Kratos-realworld/internal/conf"
+	"Kratos-realworld/internal/pkg/middleware/auth"
 	"context"
 	"errors"
 	"fmt"
@@ -49,14 +51,19 @@ type ProfileRepo interface {
 }
 
 type UserUsecase struct {
-	ur UserRepo
-	pr ProfileRepo
+	ur   UserRepo
+	pr   ProfileRepo
+	jwtc *conf.JWT
 
 	log *log.Helper
 }
 
-func NewUserUsecase(ur UserRepo, pr ProfileRepo, logger log.Logger) *UserUsecase {
-	return &UserUsecase{ur: ur, pr: pr, log: log.NewHelper(logger)}
+func NewUserUsecase(ur UserRepo, pr ProfileRepo, logger log.Logger, jwtc *conf.JWT) *UserUsecase {
+	return &UserUsecase{ur: ur, pr: pr, jwtc: jwtc, log: log.NewHelper(logger)}
+}
+
+func (uc *UserUsecase) generateToken(username string) string {
+	return auth.GenerateToken(uc.jwtc.Token, username)
 }
 
 func (uc *UserUsecase) Register(ctx context.Context, username, email, password string) (*UserLogin, error) {
@@ -71,7 +78,7 @@ func (uc *UserUsecase) Register(ctx context.Context, username, email, password s
 	return &UserLogin{
 		Email:    email,
 		Username: username,
-		Token:    "xxx",
+		Token:    uc.generateToken(username),
 	}, nil
 }
 
@@ -89,6 +96,6 @@ func (uc *UserUsecase) Login(ctx context.Context, email, password string) (*User
 		Username: u.Username,
 		Bio:      u.Bio,
 		Image:    u.Image,
-		Token:    "abc",
+		Token:    uc.generateToken(u.Username),
 	}, nil
 }

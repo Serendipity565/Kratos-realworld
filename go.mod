@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/go-kratos/kratos/v2 v2.7.2
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/google/wire v0.5.0
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/automaxprocs v1.5.1
