@@ -6,7 +6,10 @@ import (
 	"Kratos-realworld/internal/pkg/middleware/auth"
 	"Kratos-realworld/internal/service"
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
+	"github.com/gorilla/handlers"
+	nethttp "net/http"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -31,6 +34,20 @@ func NewHTTPServer(c *conf.Server, jwtc *conf.JWT, greeter *service.RealWorldSer
 		http.Middleware(
 			recovery.Recovery(),
 			selector.Server(auth.JWTAuth(jwtc.Token)).Match(NewSkipRoutersMatcher()).Build(),
+		),
+		http.Filter(
+			func(h nethttp.Handler) nethttp.Handler {
+				return nethttp.HandlerFunc(func(w nethttp.ResponseWriter, r *nethttp.Request) {
+					fmt.Println("route filter 2 in")
+					h.ServeHTTP(w, r)
+					fmt.Println("route filter 2 out")
+				})
+			},
+			handlers.CORS(
+				handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
+				handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
+				handlers.AllowedOrigins([]string{"*"}),
+			),
 		),
 	}
 	if c.Http.Network != "" {
